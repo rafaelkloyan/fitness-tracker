@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Брутальный Трекер Питания и Тренировок</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Шапка -->
+        <header class="header">
+            <h1><i class="fas fa-dumbbell"></i> Брутальный Трекер</h1>
+            <p class="subtitle">Ешь. Тренируйся. Спи. Повторяй. Никакой хуйни.</p>
+        </header>
+
+        <!-- Навигация -->
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="food">🍔 Питание</button>
+            <button class="tab-btn" data-tab="workout">🏋️ Тренировки</button>
+            <button class="tab-btn" data-tab="progress">📈 Прогресс</button>
+            <button class="tab-btn" data-tab="rules">📋 Правила</button>
+        </nav>
+
+        <!-- Вкладка Питания -->
+        <div id="food-tab" class="tab-content active">
+            <div class="card">
+                <h2><i class="fas fa-utensils"></i> Сегодняшний рацион</h2>
+                <div class="macros-display">
+                    <div class="macro-card">
+                        <h3>Белок</h3>
+                        <div class="progress-circle" id="protein-circle">
+                            <span>0/100г</span>
+                        </div>
+                    </div>
+                    <div class="macro-card">
+                        <h3>Углеводы</h3>
+                        <div class="progress-circle" id="carbs-circle">
+                            <span>0/200г</span>
+                        </div>
+                    </div>
+                    <div class="macro-card">
+                        <h3>Жиры</h3>
+                        <div class="progress-circle" id="fats-circle">
+                            <span>0/85г</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="meal-section">
+                    <h3>Приемы пищи</h3>
+                    <div class="meal-cards">
+                        <div class="meal-card" data-meal="breakfast">
+                            <h4>🍳 Завтрак</h4>
+                            <div class="meal-items"></div>
+                            <button class="add-btn" onclick="openMealModal('breakfast')">+ Добавить</button>
+                        </div>
+                        <div class="meal-card" data-meal="lunch">
+                            <h4>🥙 Обед</h4>
+                            <div class="meal-items"></div>
+                            <button class="add-btn" onclick="openMealModal('lunch')">+ Добавить</button>
+                        </div>
+                        <div class="meal-card" data-meal="dinner">
+                            <h4>🍽️ Ужин</h4>
+                            <div class="meal-items"></div>
+                            <button class="add-btn" onclick="openMealModal('dinner')">+ Добавить</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-add">
+                    <h3>Быстрый добаватор</h3>
+                    <div class="quick-buttons">
+                        <button class="quick-btn" onclick="addQuickItem('Куриная грудка 100г', 30, 0, 3, 'lunch')">
+                            🍗 Курица (100г)
+                        </button>
+                        <button class="quick-btn" onclick="addQuickItem('Гречка 80г сухой', 10, 60, 2, 'lunch')">
+                            🍚 Гречка (80г)
+                        </button>
+                        <button class="quick-btn" onclick="addQuickItem('Яйца 3 шт', 18, 1, 15, 'breakfast')">
+                            🥚 Яйца (3шт)
+                        </button>
+                        <button class="quick-btn" onclick="addQuickItem('Овощи 200г', 2, 10, 0, 'dinner')">
+                            🥦 Овощи (200г)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Вкладка Тренировок -->
+        <div id="workout-tab" class="tab-content">
+            <div class="card">
+                <h2><i class="fas fa-dumbbell"></i> Программа на неделю</h2>
+                
+                <div class="day-selector">
+                    <button class="day-btn active" data-day="1">День 1: Спина+Плечи</button>
+                    <button class="day-btn" data-day="2">День 2: Ноги</button>
+                    <button class="day-btn" data-day="3">День 3: Грудь+Руки</button>
+                </div>
+
+                <div class="workout-day active" id="day-1">
+                    <h3>📋 Упражнения:</h3>
+                    <ul class="exercise-list">
+                        <li><input type="checkbox"> Подтягивания - 4х15,12,10,8</li>
+                        <li><input type="checkbox"> Тяга горизонтального блока - 4х15,15,10,10</li>
+                        <li><input type="checkbox"> Тяга гантели в наклоне - 3х10</li>
+                        <li><input type="checkbox"> Жим штанги сидя - 4х15,12,10,10</li>
+                        <li><input type="checkbox"> Махи гантелями - 3х15</li>
+                    </ul>
+                    <div class="workout-notes">
+                        <textarea placeholder="Заметки по тренировке (веса, самочувствие)..." rows="3"></textarea>
+                        <button class="save-btn">💾 Сохранить день</button>
+                    </div>
+                </div>
+
+                <div class="workout-day" id="day-2">
+                    <!-- Аналогично для дня 2 -->
+                </div>
+
+                <div class="workout-day" id="day-3">
+                    <!-- Аналогично для дня 3 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Вкладка Прогресса -->
+        <div id="progress-tab" class="tab-content">
+            <div class="card">
+                <h2><i class="fas fa-chart-line"></i> Твой прогресс</h2>
+                <div class="progress-grid">
+                    <div class="stat-card">
+                        <h3>Дней без срыва</h3>
+                        <p class="stat-number" id="streak">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Съедено белка за неделю</h3>
+                        <p class="stat-number" id="weekly-protein">0г</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Тренировок за месяц</h3>
+                        <p class="stat-number" id="monthly-workouts">0</p>
+                    </div>
+                </div>
+                
+                <div class="history">
+                    <h3>История за неделю</h3>
+                    <div class="history-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>День</th>
+                                    <th>Белки</th>
+                                    <th>Углеводы</th>
+                                    <th>Жиры</th>
+                                    <th>Тренировка</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-body">
+                                <!-- Заполнится через JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Вкладка Правил -->
+        <div id="rules-tab" class="tab-content">
+            <div class="card">
+                <h2><i class="fas fa-book"></i> Священные скрижали</h2>
+                <div class="rules-list">
+                    <div class="rule-item">
+                        <h3>🍳 ЗАВТРАК (обязательно)</h3>
+                        <p>3 яйца + овощи. Без вариантов.</p>
+                    </div>
+                    <div class="rule-item">
+                        <h3>🥙 ОБЕД</h3>
+                        <p>Пакет крупы + мясо/рыба + овощи. Разогрел и забыл.</p>
+                    </div>
+                    <div class="rule-item">
+                        <h3>🍽️ УЖИН</h3>
+                        <p>Мясо/рыба + овощи. Крупы минимум или ноль.</p>
+                    </div>
+                    <div class="rule-item">
+                        <h3>☕️ НАПИТКИ</h3>
+                        <p>Американо. Вода (2л минимум). Всё.</p>
+                    </div>
+                    <div class="rule-item forbidden">
+                        <h3>🚫 ЗАПРЕЩЕНО</h3>
+                        <p>Творог, молоко, сыр, кефир, орехи, пасты, булки, сахар, оправдания.</p>
+                    </div>
+                </div>
+                
+                <div class="shopping-list">
+                    <h3>📝 Список покупок на воскресенье</h3>
+                    <ul>
+                        <li><input type="checkbox"> Крупа (гречка/рис) - 1кг</li>
+                        <li><input type="checkbox"> Куриная грудка - 1.5кг</li>
+                        <li><input type="checkbox"> Яйца - 20шт</li>
+                        <li><input type="checkbox"> Замороженные овощи - 2-3 упаковки</li>
+                        <li><input type="checkbox"> Свежие овощи (помидоры, огурцы)</li>
+                        <li><input type="checkbox"> Приправы (соль, перец, паприка)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно для добавления еды -->
+        <div id="meal-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeMealModal()">&times;</span>
+                <h3>Добавить еду</h3>
+                <div class="form-group">
+                    <label>Название:</label>
+                    <input type="text" id="food-name" placeholder="Например: Куриная грудка">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Белки (г):</label>
+                        <input type="number" id="food-protein" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Углеводы (г):</label>
+                        <input type="number" id="food-carbs" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Жиры (г):</label>
+                        <input type="number" id="food-fat" value="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Прием пищи:</label>
+                    <select id="food-meal">
+                        <option value="breakfast">Завтрак</option>
+                        <option value="lunch">Обед</option>
+                        <option value="dinner">Ужин</option>
+                    </select>
+                </div>
+                <button class="save-btn" onclick="addFoodItem()">Добавить</button>
+            </div>
+        </div>
+
+        <!-- Футер -->
+        <footer class="footer">
+            <p>Сделано с ❤️ и 🏋️ для тех, кто не ищет лёгких путей</p>
+            <p class="today-date" id="today-date"></p>
+            <button class="reset-btn" onclick="resetDay()">🔄 Сбросить день</button>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
