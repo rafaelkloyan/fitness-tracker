@@ -3,253 +3,1053 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Брутальный Трекер Питания и Тренировок</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Брутальный трекер 💪</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(145deg, #0b1a2e 0%, #1a2f3f 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.95);
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .header {
+            background: #1e3c4a;
+            color: white;
+            padding: 30px 25px;
+            text-align: center;
+            border-bottom: 5px solid #e74c3c;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+        
+        /* НАВИГАЦИЯ */
+        .nav-tabs {
+            display: flex;
+            background: #1e3c4a;
+            padding: 10px 10px 0 10px;
+            gap: 8px;
+        }
+        
+        .nav-btn {
+            flex: 1;
+            padding: 16px 8px;
+            background: #2c4e5e;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 20px 20px 0 0;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .nav-btn.active {
+            background: white;
+            color: #1e3c4a;
+        }
+        
+        .nav-btn:hover:not(.active) {
+            background: #3a6275;
+            color: white;
+        }
+        
+        /* КОНТЕНТ ВКЛАДОК */
+        .tab-pane {
+            display: none;
+            padding: 30px;
+            background: white;
+        }
+        
+        .tab-pane.active {
+            display: block;
+        }
+        
+        /* КАРТОЧКИ */
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.03);
+            border: 1px solid #edf2f7;
+        }
+        
+        .card h2 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #1e3c4a;
+            margin-bottom: 25px;
+            font-size: 1.7rem;
+            border-bottom: 3px solid #e74c3c;
+            padding-bottom: 15px;
+        }
+        
+        /* МАКРОСЫ */
+        .macro-grid {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .macro-item {
+            text-align: center;
+            flex: 1 1 150px;
+        }
+        
+        .macro-circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: conic-gradient(#27ae60 0deg, #e0e0e0 0deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px auto;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .macro-circle::before {
+            content: '';
+            position: absolute;
+            width: 110px;
+            height: 110px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .macro-circle span {
+            position: relative;
+            z-index: 2;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #1e3c4a;
+        }
+        
+        .macro-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        /* ПРИЕМЫ ПИЩИ */
+        .meal-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .meal-box {
+            background: #f9fcff;
+            border-radius: 20px;
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+            transition: 0.2s;
+        }
+        
+        .meal-box:hover {
+            border-color: #e74c3c;
+        }
+        
+        .meal-box h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #1e3c4a;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+        
+        .food-list {
+            min-height: 100px;
+            background: white;
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px dashed #cbd5e0;
+        }
+        
+        .food-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 5px;
+            border-bottom: 1px solid #edf2f7;
+            font-size: 0.95rem;
+        }
+        
+        .btn-add {
+            width: 100%;
+            padding: 12px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .btn-add:hover {
+            background: #219a52;
+            transform: scale(1.02);
+        }
+        
+        /* КНОПКИ-БЫСТРЯЧКИ */
+        .quick-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .quick-btn {
+            flex: 1 1 160px;
+            padding: 14px 12px;
+            background: #1e3c4a;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+        
+        .quick-btn:hover {
+            background: #e74c3c;
+            transform: translateY(-3px);
+        }
+        
+        /* ТРЕНИРОВКИ */
+        .day-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .day-tab {
+            flex: 1;
+            min-width: 150px;
+            padding: 16px 8px;
+            background: #ecf0f1;
+            border: none;
+            border-radius: 16px;
+            font-weight: 700;
+            color: #2c3e50;
+            cursor: pointer;
+            transition: 0.2s;
+            border-bottom: 4px solid transparent;
+        }
+        
+        .day-tab.active {
+            background: #1e3c4a;
+            color: white;
+            border-bottom: 4px solid #e74c3c;
+        }
+        
+        .workout-day {
+            display: none;
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 24px;
+        }
+        
+        .workout-day.active {
+            display: block;
+        }
+        
+        .exercise-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            background: white;
+            margin-bottom: 10px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .exercise-item input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            margin-right: 18px;
+            accent-color: #27ae60;
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 1rem;
+            margin: 20px 0;
+            resize: vertical;
+        }
+        
+        .btn-save {
+            background: #1e3c4a;
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* МОДАЛКА */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 35px;
+            border-radius: 32px;
+            width: 90%;
+            max-width: 550px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            position: relative;
+        }
+        
+        .close {
+            position: absolute;
+            right: 25px;
+            top: 20px;
+            font-size: 32px;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 18px;
+            font-size: 1rem;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .delete-btn {
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            color: #e74c3c;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 25px;
+            background: #edf2f7;
+            border-top: 4px solid #e74c3c;
+        }
+        
+        .reset-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 40px;
+            font-weight: 700;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+        
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .stat-block {
+            background: #f1f9fa;
+            padding: 25px;
+            border-radius: 24px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #e74c3c;
+            line-height: 1;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: #1e3c4a;
+            color: white;
+            padding: 14px;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .rule-card {
+            padding: 20px;
+            background: #f8fafc;
+            border-left: 8px solid #27ae60;
+            margin-bottom: 20px;
+            border-radius: 16px;
+        }
+        
+        .rule-card.forbidden {
+            border-left-color: #e74c3c;
+            background: #fff5f5;
+        }
+        
+        @media (max-width: 700px) {
+            .container { border-radius: 0; }
+            .macro-grid { flex-direction: column; align-items: center; }
+            .form-row { flex-direction: column; }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <!-- Шапка -->
-        <header class="header">
-            <h1><i class="fas fa-dumbbell"></i> Брутальный Трекер</h1>
-            <p class="subtitle">Ешь. Тренируйся. Спи. Повторяй. Никакой хуйни.</p>
-        </header>
-
-        <!-- Навигация -->
-        <nav class="tabs">
-            <button class="tab-btn active" data-tab="food">🍔 Питание</button>
-            <button class="tab-btn" data-tab="workout">🏋️ Тренировки</button>
-            <button class="tab-btn" data-tab="progress">📈 Прогресс</button>
-            <button class="tab-btn" data-tab="rules">📋 Правила</button>
-        </nav>
-
-        <!-- Вкладка Питания -->
-        <div id="food-tab" class="tab-content active">
+        <!-- ШАПКА -->
+        <div class="header">
+            <h1>
+                🏋️ БРУТАЛЬНЫЙ ТРЕКЕР
+            </h1>
+            <div class="subtitle">Ешь. Тягай. Спи. Без соплей.</div>
+        </div>
+        
+        <!-- НАВИГАЦИЯ -->
+        <div class="nav-tabs">
+            <button class="nav-btn active" data-tab="food">🍖 ПИТАНИЕ</button>
+            <button class="nav-btn" data-tab="workout">🔥 ТРЕНИРОВКИ</button>
+            <button class="nav-btn" data-tab="progress">📊 ПРОГРЕСС</button>
+            <button class="nav-btn" data-tab="rules">📜 ПРАВИЛА</button>
+        </div>
+        
+        <!-- ========= ВКЛАДКА ПИТАНИЕ ========= -->
+        <div id="food" class="tab-pane active">
             <div class="card">
-                <h2><i class="fas fa-utensils"></i> Сегодняшний рацион</h2>
-                <div class="macros-display">
-                    <div class="macro-card">
-                        <h3>Белок</h3>
-                        <div class="progress-circle" id="protein-circle">
+                <h2>🍗 МАКРОСЫ СЕГОДНЯ</h2>
+                <div class="macro-grid">
+                    <div class="macro-item">
+                        <div class="macro-label">БЕЛОК</div>
+                        <div id="protein-circle" class="macro-circle">
                             <span>0/100г</span>
                         </div>
                     </div>
-                    <div class="macro-card">
-                        <h3>Углеводы</h3>
-                        <div class="progress-circle" id="carbs-circle">
+                    <div class="macro-item">
+                        <div class="macro-label">УГЛЕВОДЫ</div>
+                        <div id="carbs-circle" class="macro-circle">
                             <span>0/200г</span>
                         </div>
                     </div>
-                    <div class="macro-card">
-                        <h3>Жиры</h3>
-                        <div class="progress-circle" id="fats-circle">
+                    <div class="macro-item">
+                        <div class="macro-label">ЖИРЫ</div>
+                        <div id="fats-circle" class="macro-circle">
                             <span>0/85г</span>
                         </div>
                     </div>
                 </div>
-
-                <div class="meal-section">
-                    <h3>Приемы пищи</h3>
-                    <div class="meal-cards">
-                        <div class="meal-card" data-meal="breakfast">
-                            <h4>🍳 Завтрак</h4>
-                            <div class="meal-items"></div>
-                            <button class="add-btn" onclick="openMealModal('breakfast')">+ Добавить</button>
-                        </div>
-                        <div class="meal-card" data-meal="lunch">
-                            <h4>🥙 Обед</h4>
-                            <div class="meal-items"></div>
-                            <button class="add-btn" onclick="openMealModal('lunch')">+ Добавить</button>
-                        </div>
-                        <div class="meal-card" data-meal="dinner">
-                            <h4>🍽️ Ужин</h4>
-                            <div class="meal-items"></div>
-                            <button class="add-btn" onclick="openMealModal('dinner')">+ Добавить</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="quick-add">
-                    <h3>Быстрый добаватор</h3>
-                    <div class="quick-buttons">
-                        <button class="quick-btn" onclick="addQuickItem('Куриная грудка 100г', 30, 0, 3, 'lunch')">
-                            🍗 Курица (100г)
-                        </button>
-                        <button class="quick-btn" onclick="addQuickItem('Гречка 80г сухой', 10, 60, 2, 'lunch')">
-                            🍚 Гречка (80г)
-                        </button>
-                        <button class="quick-btn" onclick="addQuickItem('Яйца 3 шт', 18, 1, 15, 'breakfast')">
-                            🥚 Яйца (3шт)
-                        </button>
-                        <button class="quick-btn" onclick="addQuickItem('Овощи 200г', 2, 10, 0, 'dinner')">
-                            🥦 Овощи (200г)
-                        </button>
-                    </div>
-                </div>
             </div>
-        </div>
-
-        <!-- Вкладка Тренировок -->
-        <div id="workout-tab" class="tab-content">
+            
             <div class="card">
-                <h2><i class="fas fa-dumbbell"></i> Программа на неделю</h2>
-                
-                <div class="day-selector">
-                    <button class="day-btn active" data-day="1">День 1: Спина+Плечи</button>
-                    <button class="day-btn" data-day="2">День 2: Ноги</button>
-                    <button class="day-btn" data-day="3">День 3: Грудь+Руки</button>
-                </div>
-
-                <div class="workout-day active" id="day-1">
-                    <h3>📋 Упражнения:</h3>
-                    <ul class="exercise-list">
-                        <li><input type="checkbox"> Подтягивания - 4х15,12,10,8</li>
-                        <li><input type="checkbox"> Тяга горизонтального блока - 4х15,15,10,10</li>
-                        <li><input type="checkbox"> Тяга гантели в наклоне - 3х10</li>
-                        <li><input type="checkbox"> Жим штанги сидя - 4х15,12,10,10</li>
-                        <li><input type="checkbox"> Махи гантелями - 3х15</li>
-                    </ul>
-                    <div class="workout-notes">
-                        <textarea placeholder="Заметки по тренировке (веса, самочувствие)..." rows="3"></textarea>
-                        <button class="save-btn">💾 Сохранить день</button>
+                <h2>🥘 ПРИЕМЫ ПИЩИ</h2>
+                <div class="meal-row">
+                    <div class="meal-box" data-meal="breakfast">
+                        <h3>🍳 ЗАВТРАК</h3>
+                        <div id="breakfast-list" class="food-list"></div>
+                        <button class="btn-add" onclick="openModal('breakfast')">+ Добавить</button>
                     </div>
-                </div>
-
-                <div class="workout-day" id="day-2">
-                    <!-- Аналогично для дня 2 -->
-                </div>
-
-                <div class="workout-day" id="day-3">
-                    <!-- Аналогично для дня 3 -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Вкладка Прогресса -->
-        <div id="progress-tab" class="tab-content">
-            <div class="card">
-                <h2><i class="fas fa-chart-line"></i> Твой прогресс</h2>
-                <div class="progress-grid">
-                    <div class="stat-card">
-                        <h3>Дней без срыва</h3>
-                        <p class="stat-number" id="streak">0</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Съедено белка за неделю</h3>
-                        <p class="stat-number" id="weekly-protein">0г</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Тренировок за месяц</h3>
-                        <p class="stat-number" id="monthly-workouts">0</p>
-                    </div>
-                </div>
-                
-                <div class="history">
-                    <h3>История за неделю</h3>
-                    <div class="history-table">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>День</th>
-                                    <th>Белки</th>
-                                    <th>Углеводы</th>
-                                    <th>Жиры</th>
-                                    <th>Тренировка</th>
-                                </tr>
-                            </thead>
-                            <tbody id="history-body">
-                                <!-- Заполнится через JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Вкладка Правил -->
-        <div id="rules-tab" class="tab-content">
-            <div class="card">
-                <h2><i class="fas fa-book"></i> Священные скрижали</h2>
-                <div class="rules-list">
-                    <div class="rule-item">
-                        <h3>🍳 ЗАВТРАК (обязательно)</h3>
-                        <p>3 яйца + овощи. Без вариантов.</p>
-                    </div>
-                    <div class="rule-item">
+                    <div class="meal-box" data-meal="lunch">
                         <h3>🥙 ОБЕД</h3>
-                        <p>Пакет крупы + мясо/рыба + овощи. Разогрел и забыл.</p>
+                        <div id="lunch-list" class="food-list"></div>
+                        <button class="btn-add" onclick="openModal('lunch')">+ Добавить</button>
                     </div>
-                    <div class="rule-item">
+                    <div class="meal-box" data-meal="dinner">
                         <h3>🍽️ УЖИН</h3>
-                        <p>Мясо/рыба + овощи. Крупы минимум или ноль.</p>
-                    </div>
-                    <div class="rule-item">
-                        <h3>☕️ НАПИТКИ</h3>
-                        <p>Американо. Вода (2л минимум). Всё.</p>
-                    </div>
-                    <div class="rule-item forbidden">
-                        <h3>🚫 ЗАПРЕЩЕНО</h3>
-                        <p>Творог, молоко, сыр, кефир, орехи, пасты, булки, сахар, оправдания.</p>
+                        <div id="dinner-list" class="food-list"></div>
+                        <button class="btn-add" onclick="openModal('dinner')">+ Добавить</button>
                     </div>
                 </div>
                 
-                <div class="shopping-list">
-                    <h3>📝 Список покупок на воскресенье</h3>
-                    <ul>
-                        <li><input type="checkbox"> Крупа (гречка/рис) - 1кг</li>
-                        <li><input type="checkbox"> Куриная грудка - 1.5кг</li>
-                        <li><input type="checkbox"> Яйца - 20шт</li>
-                        <li><input type="checkbox"> Замороженные овощи - 2-3 упаковки</li>
-                        <li><input type="checkbox"> Свежие овощи (помидоры, огурцы)</li>
-                        <li><input type="checkbox"> Приправы (соль, перец, паприка)</li>
-                    </ul>
+                <h3 style="margin: 30px 0 15px;">⚡ БЫСТРЫЙ ДОБАВАТОР</h3>
+                <div class="quick-stack">
+                    <button class="quick-btn" onclick="quickAdd('Курица 100г', 30, 0, 3, 'lunch')">🍗 Курица (30/0/3)</button>
+                    <button class="quick-btn" onclick="quickAdd('Гречка 80г', 10, 60, 2, 'lunch')">🍚 Гречка (10/60/2)</button>
+                    <button class="quick-btn" onclick="quickAdd('Яйца 3шт', 18, 1, 15, 'breakfast')">🥚 Яйца 3шт (18/1/15)</button>
+                    <button class="quick-btn" onclick="quickAdd('Овощи 200г', 2, 10, 0, 'dinner')">🥦 Овощи (2/10/0)</button>
+                    <button class="quick-btn" onclick="quickAdd('Говядина 150г', 40, 0, 15, 'lunch')">🥩 Говядина (40/0/15)</button>
+                    <button class="quick-btn" onclick="quickAdd('Рыба 150г', 35, 0, 10, 'dinner')">🐟 Рыба (35/0/10)</button>
                 </div>
             </div>
         </div>
-
-        <!-- Модальное окно для добавления еды -->
-        <div id="meal-modal" class="modal">
+        
+        <!-- ========= ВКЛАДКА ТРЕНИРОВКИ ========= -->
+        <div id="workout" class="tab-pane">
+            <div class="card">
+                <h2>🔥 ПРОГРАММА СПЛИТ</h2>
+                
+                <div class="day-tabs">
+                    <button class="day-tab active" data-day="1">День 1: Спина+Плечи</button>
+                    <button class="day-tab" data-day="2">День 2: Ноги</button>
+                    <button class="day-tab" data-day="3">День 3: Грудь+Руки</button>
+                </div>
+                
+                <!-- ДЕНЬ 1 -->
+                <div id="workout-day-1" class="workout-day active">
+                    <div class="exercise-item">
+                        <input type="checkbox" class="ex-check"> Подтягивания — 4x15,12,10,8 (ОП 5сек)
+                    </div>
+                    <div class="exercise-item">
+                        <input type="checkbox" class="ex-check"> Тяга горизонтального блока — 4x15,15,10,10
+                    </div>
+                    <div class="exercise-item">
+                        <input type="checkbox" class="ex-check"> Тяга гантели в наклоне — 3x10
+                    </div>
+                    <div class="exercise-item">
+                        <input type="checkbox" class="ex-check"> Жим штанги сидя — 4x15,12,10,10
+                    </div>
+                    <div class="exercise-item">
+                        <input type="checkbox" class="ex-check"> Махи гантелями — 3x15
+                    </div>
+                    <textarea id="notes-1" placeholder="Рабочие веса, самочувствие, мысли..."></textarea>
+                    <button class="btn-save" onclick="saveWorkout(1)">💾 СОХРАНИТЬ ТРЕНИРОВКУ</button>
+                </div>
+                
+                <!-- ДЕНЬ 2 -->
+                <div id="workout-day-2" class="workout-day">
+                    <div class="exercise-item">
+                        <input type="checkbox" class="ex-check"> Приседания со штангой — 4x12,12,10,10
+                    </div>
+                    <div class="exercise-item">
+                        <input type="checkbox" class="ex-check"> Румынская тяга — 3x15
+                    </div>
+                    <div class="exercise-item">
+                        <input type="checkbox" class="ex-check"> Жим ногами — 4x20,15,10,10
+                    </div>
+                    <div class="exercise-item">
+                        <input type="checkbox" class="ex-check"> Сгибания ног — 4x15,12,10,10
+                    </div>
+                    <div class="exercise-item">
+                        <input type="checkbox" class="ex-check"> Выпады с гантелями — 3x10
+                    </div>
+                    <textarea id="notes-2" placeholder="Рабочие веса, самочувствие, мысли..."></textarea>
+                    <button class="btn-save" onclick="saveWorkout(2)">💾 СОХРАНИТЬ ТРЕНИРОВКУ</button>
+                </div>
+                
+                <!-- ДЕНЬ 3 -->
+                <div id="workout-day-3" class="workout-day">
+                    <div class="exercise-item">
+                        <input type="checkbox" class="ex-check"> Жим гантелей на наклонной — 4x12,12,10,10
+                    </div>
+                    <div class="exercise-item">
+                        <input type="checkbox" class="ex-check"> Жим штанги лежа — 4x12,12,10,10
+                    </div>
+                    <div class="exercise-item">
+                        <input type="checkbox" class="ex-check"> Отжимания на брусьях — 4x12,12,10,10
+                    </div>
+                    <div class="exercise-item">
+                        <input type="checkbox" class="ex-check"> Бицепс со штангой — 3x12
+                    </div>
+                    <div class="exercise-item">
+                        <input type="checkbox" class="ex-check"> Французский жим — 3x12
+                    </div>
+                    <textarea id="notes-3" placeholder="Рабочие веса, самочувствие, мысли..."></textarea>
+                    <button class="btn-save" onclick="saveWorkout(3)">💾 СОХРАНИТЬ ТРЕНИРОВКУ</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========= ВКЛАДКА ПРОГРЕСС ========= -->
+        <div id="progress" class="tab-pane">
+            <div class="card">
+                <h2>📈 ТВОИ ЦИФРЫ</h2>
+                <div class="stat-grid">
+                    <div class="stat-block">
+                        <div style="font-size:1.4rem;">🔥 СЕРИЯ</div>
+                        <div id="streak" class="stat-number">0</div>
+                        <div>дней без срыва</div>
+                    </div>
+                    <div class="stat-block">
+                        <div style="font-size:1.4rem;">🥩 БЕЛОК ЗА НЕДЕЛЮ</div>
+                        <div id="weekly-protein" class="stat-number">0</div>
+                        <div>грамм</div>
+                    </div>
+                    <div class="stat-block">
+                        <div style="font-size:1.4rem;">🏋️ ТРЕНИРОВОК</div>
+                        <div id="monthly-workouts" class="stat-number">0</div>
+                        <div>за 30 дней</div>
+                    </div>
+                </div>
+                
+                <h3>📅 ИСТОРИЯ (7 дней)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>День</th>
+                            <th>Белки</th>
+                            <th>Углеводы</th>
+                            <th>Жиры</th>
+                            <th>Тренировка</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- ========= ВКЛАДКА ПРАВИЛА ========= -->
+        <div id="rules" class="tab-pane">
+            <div class="card">
+                <h2>📜 СВЯЩЕННЫЕ ПРАВИЛА</h2>
+                <div class="rule-card">
+                    <h3>🍳 ЗАВТРАК</h3>
+                    <p>3 яйца + овощи. Без вариантов. Кофе — американо.</p>
+                </div>
+                <div class="rule-card">
+                    <h3>🥙 ОБЕД</h3>
+                    <p>Пакет крупы + мясо/рыба + овощи. Гречка, рис, булгур.</p>
+                </div>
+                <div class="rule-card">
+                    <h3>🍽️ УЖИН</h3>
+                    <p>Мясо/рыба + овощи. Крупы — ноль, минимум.</p>
+                </div>
+                <div class="rule-card forbidden">
+                    <h3>🚫 ЗАПРЕЩЕНКА</h3>
+                    <p>Творог, сыр, молоко, кефир, орехи, пасты, булки, сахар, соки, сладкое.</p>
+                </div>
+                <div class="rule-card">
+                    <h3>📦 ЗАКУП НА НЕДЕЛЮ</h3>
+                    <p>Крупа 1кг, курица 1.5кг, яйца 20шт, заморозка овощей 3уп, свежие овощи, приправы.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- МОДАЛЬНОЕ ОКНО ДОБАВЛЕНИЯ ЕДЫ -->
+        <div id="foodModal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeMealModal()">&times;</span>
-                <h3>Добавить еду</h3>
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2 style="margin-bottom:25px;">➕ ДОБАВИТЬ ЕДУ</h2>
                 <div class="form-group">
-                    <label>Название:</label>
-                    <input type="text" id="food-name" placeholder="Например: Куриная грудка">
+                    <label>🍎 Название</label>
+                    <input type="text" id="foodName" placeholder="Куриная грудка, гречка...">
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Белки (г):</label>
-                        <input type="number" id="food-protein" value="0">
+                        <label>🥩 Белки (г)</label>
+                        <input type="number" id="foodProtein" value="0" min="0">
                     </div>
                     <div class="form-group">
-                        <label>Углеводы (г):</label>
-                        <input type="number" id="food-carbs" value="0">
+                        <label>🍚 Углеводы (г)</label>
+                        <input type="number" id="foodCarbs" value="0" min="0">
                     </div>
                     <div class="form-group">
-                        <label>Жиры (г):</label>
-                        <input type="number" id="food-fat" value="0">
+                        <label>🧈 Жиры (г)</label>
+                        <input type="number" id="foodFat" value="0" min="0">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Прием пищи:</label>
-                    <select id="food-meal">
+                    <label>🍽️ Прием пищи</label>
+                    <select id="foodMeal">
                         <option value="breakfast">Завтрак</option>
                         <option value="lunch">Обед</option>
                         <option value="dinner">Ужин</option>
                     </select>
                 </div>
-                <button class="save-btn" onclick="addFoodItem()">Добавить</button>
+                <button class="btn-save" style="width:100%;" onclick="addFoodItem()">✅ ДОБАВИТЬ</button>
             </div>
         </div>
-
-        <!-- Футер -->
-        <footer class="footer">
-            <p>Сделано с ❤️ и 🏋️ для тех, кто не ищет лёгких путей</p>
-            <p class="today-date" id="today-date"></p>
-            <button class="reset-btn" onclick="resetDay()">🔄 Сбросить день</button>
-        </footer>
+        
+        <!-- ФУТЕР -->
+        <div class="footer">
+            <div id="todayDate" style="font-size:1.3rem; font-weight:bold; margin-bottom:10px;"></div>
+            <button class="reset-btn" onclick="resetDay()">🔄 СБРОСИТЬ ДЕНЬ</button>
+            <p style="margin-top:20px; opacity:0.7;">Сделано для пацанов, которые не ищут легких путей</p>
+        </div>
     </div>
-
-    <script src="script.js"></script>
+    
+    <script>
+        // =========================================
+        //  ЖЕЛЕЗОБЕТОННЫЙ JS - РАБОТАЕТ ОФЛАЙН
+        // =========================================
+        
+        // ---------- СОСТОЯНИЕ ----------
+        let state = {
+            currentDate: new Date().toDateString(),
+            protein: 0, carbs: 0, fat: 0,
+            meals: {
+                breakfast: [],
+                lunch: [],
+                dinner: []
+            },
+            streak: 0,
+            history: [],
+            workouts: {
+                day1: { done: false, notes: '', date: null },
+                day2: { done: false, notes: '', date: null },
+                day3: { done: false, notes: '', date: null }
+            }
+        };
+        
+        // ---------- ЗАГРУЗКА / СОХРАНЕНИЕ ----------
+        function loadState() {
+            try {
+                const saved = localStorage.getItem('brutalTracker');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    // Проверка даты — сброс если новый день
+                    if (parsed.currentDate !== new Date().toDateString()) {
+                        // Сохраняем в историю старый день
+                        if (parsed.protein > 0 || parsed.carbs > 0 || parsed.fat > 0) {
+                            parsed.history = parsed.history || [];
+                            parsed.history.unshift({
+                                date: parsed.currentDate,
+                                protein: parsed.protein,
+                                carbs: parsed.carbs,
+                                fat: parsed.fat,
+                                trained: parsed.workouts?.day1?.done || parsed.workouts?.day2?.done || parsed.workouts?.day3?.done || false
+                            });
+                            if (parsed.history.length > 7) parsed.history.pop();
+                        }
+                        // Сброс дня
+                        parsed.currentDate = new Date().toDateString();
+                        parsed.protein = 0; parsed.carbs = 0; parsed.fat = 0;
+                        parsed.meals = { breakfast: [], lunch: [], dinner: [] };
+                    }
+                    state = parsed;
+                    
+                    // Подсчет streak
+                    if (state.protein >= 80 && state.carbs <= 220 && state.carbs > 0) {
+                        // норм, стрик уже сохранен
+                    }
+                }
+            } catch(e) { console.warn('Ошибка загрузки', e); }
+            
+            // Дефолтные значения
+            if (!state.history) state.history = [];
+            if (!state.workouts) state.workouts = { day1: {done:false,notes:''}, day2: {done:false,notes:''}, day3: {done:false,notes:''} };
+            if (!state.streak) state.streak = 0;
+        }
+        
+        function saveState() {
+            localStorage.setItem('brutalTracker', JSON.stringify(state));
+        }
+        
+        // ---------- ОБНОВЛЕНИЕ ИНТЕРФЕЙСА ----------
+        function render() {
+            // Макросы
+            document.getElementById('protein-circle').innerHTML = `<span>${state.protein}/100г</span>`;
+            document.getElementById('carbs-circle').innerHTML = `<span>${state.carbs}/200г</span>`;
+            document.getElementById('fats-circle').innerHTML = `<span>${state.fat}/85г</span>`;
+            
+            // Проценты кругов
+            const pctProtein = Math.min(100, (state.protein/100)*100);
+            const pctCarbs = Math.min(100, (state.carbs/200)*100);
+            const pctFat = Math.min(100, (state.fat/85)*100);
+            
+            document.getElementById('protein-circle').style.background = `conic-gradient(#27ae60 ${pctProtein*3.6}deg, #e0e0e0 ${pctProtein*3.6}deg)`;
+            document.getElementById('carbs-circle').style.background = `conic-gradient(#27ae60 ${pctCarbs*3.6}deg, #e0e0e0 ${pctCarbs*3.6}deg)`;
+            document.getElementById('fats-circle').style.background = `conic-gradient(#27ae60 ${pctFat*3.6}deg, #e0e0e0 ${pctFat*3.6}deg)`;
+            
+            // Списки еды
+            renderMeal('breakfast');
+            renderMeal('lunch');
+            renderMeal('dinner');
+            
+            // Статистика
+            document.getElementById('streak').innerText = state.streak || 0;
+            
+            let weeklyProtein = 0;
+            if (state.history && state.history.length) {
+                weeklyProtein = state.history.slice(0,7).reduce((acc, day) => acc + (day.protein || 0), 0);
+            }
+            document.getElementById('weekly-protein').innerText = weeklyProtein;
+            
+            let workoutsCount = state.history ? state.history.filter(d => d.trained).length : 0;
+            document.getElementById('monthly-workouts').innerText = workoutsCount;
+            
+            // История таблица
+            renderHistory();
+            
+            // Дата в футере
+            document.getElementById('todayDate').innerText = new Date().toLocaleDateString('ru-RU', { 
+                day: 'numeric', month: 'long', year: 'numeric' 
+            });
+            
+            // Заметки тренировок (если были)
+            if (state.workouts.day1.notes) document.getElementById('notes-1').value = state.workouts.day1.notes;
+            if (state.workouts.day2.notes) document.getElementById('notes-2').value = state.workouts.day2.notes;
+            if (state.workouts.day3.notes) document.getElementById('notes-3').value = state.workouts.day3.notes;
+        }
+        
+        function renderMeal(mealName) {
+            const container = document.getElementById(`${mealName}-list`);
+            if (!container) return;
+            container.innerHTML = '';
+            state.meals[mealName].forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = 'food-item';
+                div.innerHTML = `
+                    <span>${item.name}</span>
+                    <span>${item.p}Б / ${item.c}У / ${item.f}Ж</span>
+                    <button class="delete-btn" onclick="deleteFoodItem('${mealName}', ${idx})">🗑️</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        function renderHistory() {
+            const tbody = document.getElementById('history-table-body');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            if (!state.history || state.history.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Нет данных</td></tr>';
+                return;
+            }
+            state.history.slice(0,7).forEach(day => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${new Date(day.date).toLocaleDateString('ru-RU')}</td>
+                    <td>${day.protein || 0}г</td>
+                    <td>${day.carbs || 0}г</td>
+                    <td>${day.fat || 0}г</td>
+                    <td>${day.trained ? '✅' : '❌'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        // ---------- УПРАВЛЕНИЕ ЕДОЙ ----------
+        window.quickAdd = function(name, p, c, f, meal) {
+            state.meals[meal].push({ name, p, c, f });
+            state.protein += p;
+            state.carbs += c;
+            state.fat += f;
+            
+            // Серия
+            if (state.protein >= 80 && state.carbs <= 220 && state.carbs > 0) {
+                // день выполнен
+            }
+            
+            saveState();
+            render();
+        };
+        
+        window.addFoodItem = function() {
+            const name = document.getElementById('foodName').value;
+            const p = parseInt(document.getElementById('foodProtein').value) || 0;
+            const c = parseInt(document.getElementById('foodCarbs').value) || 0;
+            const f = parseInt(document.getElementById('foodFat').value) || 0;
+            const meal = document.getElementById('foodMeal').value;
+            
+            if (!name) { alert('Введи название!'); return; }
+            
+            state.meals[meal].push({ name, p, c, f });
+            state.protein += p;
+            state.carbs += c;
+            state.fat += f;
+            
+            saveState();
+            render();
+            closeModal();
+            
+            document.getElementById('foodName').value = '';
+            document.getElementById('foodProtein').value = '0';
+            document.getElementById('foodCarbs').value = '0';
+            document.getElementById('foodFat').value = '0';
+        };
+        
+        window.deleteFoodItem = function(meal, idx) {
+            const item = state.meals[meal][idx];
+            state.protein -= item.p || 0;
+            state.carbs -= item.c || 0;
+            state.fat -= item.f || 0;
+            state.meals[meal].splice(idx, 1);
+            saveState();
+            render();
+        };
+        
+        // ---------- ТРЕНИРОВКИ ----------
+        window.saveWorkout = function(day) {
+            const notes = document.getElementById(`notes-${day}`).value;
+            state.workouts[`day${day}`] = {
+                done: true,
+                notes: notes,
+                date: new Date().toISOString()
+            };
+            saveState();
+            alert(`Тренировка День ${day} сохранена! 💪`);
+        };
+        
+        // ---------- МОДАЛКА ----------
+        window.openModal = function(meal) {
+            document.getElementById('foodMeal').value = meal;
+            document.getElementById('foodModal').style.display = 'flex';
+        };
+        window.closeModal = function() {
+            document.getElementById('foodModal').style.display = 'none';
+        };
+        
+        // ---------- СБРОС ДНЯ ----------
+        window.resetDay = function() {
+            if (confirm('Сбросить все данные за сегодня?')) {
+                // Сохранить в историю
+                if (state.protein > 0 || state.carbs > 0 || state.fat > 0) {
+                    state.history = state.history || [];
+                    state.history.unshift({
+                        date: state.currentDate,
+                        protein: state.protein,
+                        carbs: state.carbs,
+                        fat: state.fat,
+                        trained: state.workouts?.day1?.done || state.workouts?.day2?.done || state.workouts?.day3?.done || false
+                    });
+                    if (state.history.length > 7) state.history.pop();
+                }
+                
+                // Сброс
+                state.protein = 0; state.carbs = 0; state.fat = 0;
+                state.meals = { breakfast: [], lunch: [], dinner: [] };
+                saveState();
+                render();
+            }
+        };
+        
+        // ---------- НАВИГАЦИЯ (РАБОЧАЯ) ----------
+        function initNavigation() {
+            const navBtns = document.querySelectorAll('.nav-btn');
+            const panes = document.querySelectorAll('.tab-pane');
+            
+            navBtns.forEach(btn => {
+                btn.onclick = function(e) {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Убираем active с кнопок
+                    navBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Прячем все вкладки
+                    panes.forEach(p => p.classList.remove('active'));
+                    
+                    // Показываем нужную
+                    document.getElementById(tabId).classList.add('active');
+                };
+            });
+            
+            // Дни тренировок
+            const dayTabs = document.querySelectorAll('.day-tab');
+            const workoutDays = document.querySelectorAll('.workout-day');
+            
+            dayTabs.forEach(tab => {
+                tab.onclick = function() {
+                    const day = this.getAttribute('data-day');
+                    
+                    dayTabs.forEach(d => d.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    workoutDays.forEach(w => w.classList.remove('active'));
+                    document.getElementById(`workout-day-${day}`).classList.add('active');
+                };
+            });
+        }
+        
+        // ---------- СТАРТ ----------
+        window.onload = function() {
+            loadState();
+            initNavigation();
+            render();
+            
+            // Проверка стрика
+            if (state.protein >= 80 && state.carbs <= 220 && state.carbs > 0) {
+                // ок, стрик не обнуляем
+            }
+            
+            // Клик вне модалки
+            window.onclick = function(event) {
+                const modal = document.getElementById('foodModal');
+                if (event.target === modal) {
+                    closeModal();
+                }
+            };
+        };
+    </script>
 </body>
 </html>
